@@ -1,30 +1,27 @@
-# Assignment 3
-## Econ 8310 - Business Forecasting
+# BaseballData PyTorch DataLoader
 
-For homework assignment 3, you will work with our baseball pitch data (available in Canvas).
+A PyTorch DataLoader designed to handle baseball video frame extraction and XML-based CVAT annotations. Allows for the loading, preprocessing, and visualizing of baseball tracking data directly from a local or GitHub repository.
 
-- You must create a custom data loader as described in the first week of neural network lectures to load the baseball videos [2 points]
-- You must create a working and trained neural network (any network focused on the baseball pitch videos will do) using only pytorch [2 points]
-- You must store your weights and create an import script so that I can evaluate your model without training it [2 points]
+---
 
-Submit your forked repository URL on Canvas! :) I'll be manually grading this assignment.
+## Features
 
-Some checks you can make on your own:
-- Can your custom loader import a new video or set of videos?
-- Does your script train a neural network on the assigned data?
-- Did your script save your model?
-- Do you have separate code to import your model for use after training?
-
-
-# BaseballData PyTorch Dataset
-
-A custom **PyTorch Dataset** designed to handle **baseball video frame extraction and XML-based CVAT annotations**, allowing you to load, preprocess, and visualize baseball tracking data directly from a local or GitHub repository.
+This code:  
+- Automatically extracts video frames
+- Parses CVAT XML annotations for bounding boxes and movement labels
+- Converts all images to PyTorch tensors
+- Supports batch visualization with bounding boxes using Matplotlib
+- Scales bounding box coordinates to match resized images
+- Includes Error Handling for potential issues, such as:
+  - Throws an error if no data is found in the provided folder
+  - Exits with a `FileNotFoundError` if an image file is missing
+  - Raises a `ValueError` if an image is corrupted or empty  
 
 ---
 
 ## Expected Folder Structure
 
-The dataset expects your project folder to be structured as follows:
+The dataloader expects the project folder to be structured as follows:
 
 ```
 repo/
@@ -49,17 +46,6 @@ If `extract_videos=True`, the module automatically extracts frames from `.mov` v
 
 ---
 
-## Features
-
-✅ Automatically extracts video frames  
-✅ Parses **CVAT XML annotations** for bounding boxes and movement labels  
-✅ Converts all images to PyTorch tensors  
-✅ Handles **missing frames and invalid data gracefully**  
-✅ Supports **batch visualization** with bounding boxes using Matplotlib  
-✅ Scales bounding box coordinates to match resized images  
-
----
-
 ## Class Overview
 
 ```python
@@ -78,8 +64,6 @@ class BaseballData(Dataset):
 | `image_size` | `tuple` | `(28, 28)` | Target image resize size |
 
 ---
-
-
 
 ## Example Usage
 
@@ -113,7 +97,7 @@ traindata.visualize_batch(loader)
 
 ## Visualization
 
-The `visualize_batch()` function displays a batch of images along with their **bounding boxes** and **movement labels**:
+The `visualize_batch()` function displays a batch of images along with their bounding boxes and movement labels (0 = not moving, 1 = moving).
 
 
 ## Key Methods
@@ -128,10 +112,3 @@ The `visualize_batch()` function displays a batch of images along with their **b
 | `__getitem__()` | Returns image tensor, label tensor, and bounding box coordinates |
 
 ---
-
-## Error Handling
-
-The dataset includes several safety checks:
-- Throws an error if **no data is found** in the provided folder.  
-- Exits with a `FileNotFoundError` if an image file is missing.  
-- Raises a `ValueError` if an image is corrupted or empty.  
